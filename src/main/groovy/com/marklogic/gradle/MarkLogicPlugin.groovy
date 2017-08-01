@@ -21,7 +21,9 @@ import com.marklogic.gradle.task.cluster.*
 import com.marklogic.gradle.task.cpf.DeployCpfTask
 import com.marklogic.gradle.task.cpf.LoadDefaultPipelinesTask
 import com.marklogic.gradle.task.databases.*
+import com.marklogic.gradle.task.datamovement.AddCollectionsTask
 import com.marklogic.gradle.task.datamovement.DeleteCollectionsTask
+import com.marklogic.gradle.task.datamovement.RemoveCollectionsTask
 import com.marklogic.gradle.task.es.GenerateModelArtifactsTask
 import com.marklogic.gradle.task.export.ExportResourcesTask
 import com.marklogic.gradle.task.flexrep.*
@@ -123,7 +125,13 @@ class MarkLogicPlugin implements Plugin<Project> {
 		project.task("mlSetContentUpdatesAllowed", type: SetContentUpdatesAllowedTask, group: dbGroup, description: "Sets updated-allowed on each primary forest for the content database; must set the mode via e.g. -Pmode=flash-backup")
 
 		String dmGroup = "ml-Gradle Data Movement"
-		project.task("mlDeleteCollections", type: DeleteCollectionsTask, group: dmGroup, dependsOn: "Delete all documents in a comma-separated list of collection named specified by the 'collections' property")
+		project.task("mlAddCollections", type: AddCollectionsTask, group: dmGroup, description: "Add all documents in a comma-separated list of " +
+			"collection names specified by the 'collections' property to a comma-separated list of collection names specified by the 'targetCollections' property")
+		project.task("mlDeleteCollections", type: DeleteCollectionsTask, group: dmGroup, description: "Delete all documents in a comma-separated list of " +
+			"collection names specified by the 'collections' property")
+		project.task("mlRemoveCollections", type: RemoveCollectionsTask, group: dmGroup, description: "Remove all documents in a comma-separated list of " +
+			"collection names specified by the 'collections' property from a comma-separated list of collection names specified by the 'targetCollections' property; " +
+			"if these two lists are the same, you only need to specify the 'collections' property")
 
 		String devGroup = "ml-gradle Development"
 		project.task("mlCreateResource", type: CreateResourceTask, group: devGroup, description: "Create a new resource extension in the modules services directory; use -PresourceName and -PresourceType to set the resource name and type (either xqy or sjs)")

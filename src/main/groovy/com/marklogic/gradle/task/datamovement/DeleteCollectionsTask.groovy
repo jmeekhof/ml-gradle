@@ -10,11 +10,21 @@ class DeleteCollectionsTask extends MarkLogicTask {
 
 	@TaskAction
 	void deleteCollections() {
+		if (!project.hasProperty("collections")) {
+			println "Specify the collections to delete with -Pcollections=comma-separated-list"
+			return
+		}
+
 		String[] collections = getProject().property("collections").split(",")
+
 		DatabaseClient client = newClient()
-		QueryBatcherTemplate qbt = new QueryBatcherTemplate(client)
-		println "Deleting collections: " + Arrays.asList(collections)
-		qbt.applyOnCollections(new DeleteListener(), collections);
-		println "Finished deleting collections: " + Arrays.asList(collections)
+		try {
+			String message = "collections: " + Arrays.asList(collections)
+			println "Deleting " + message
+			new QueryBatcherTemplate(client).applyOnCollections(new DeleteListener(), collections);
+			println "Finished deleting " + message
+		} finally {
+			client.release()
+		}
 	}
 }
