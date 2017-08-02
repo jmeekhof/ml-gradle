@@ -22,8 +22,11 @@ import com.marklogic.gradle.task.cpf.DeployCpfTask
 import com.marklogic.gradle.task.cpf.LoadDefaultPipelinesTask
 import com.marklogic.gradle.task.databases.*
 import com.marklogic.gradle.task.datamovement.AddCollectionsTask
+import com.marklogic.gradle.task.datamovement.AddPermissionsTask
 import com.marklogic.gradle.task.datamovement.DeleteCollectionsTask
 import com.marklogic.gradle.task.datamovement.RemoveCollectionsTask
+import com.marklogic.gradle.task.datamovement.RemovePermissionsTask
+import com.marklogic.gradle.task.datamovement.SetCollectionsTask
 import com.marklogic.gradle.task.es.GenerateModelArtifactsTask
 import com.marklogic.gradle.task.export.ExportResourcesTask
 import com.marklogic.gradle.task.flexrep.*
@@ -132,6 +135,14 @@ class MarkLogicPlugin implements Plugin<Project> {
 		project.task("mlRemoveCollections", type: RemoveCollectionsTask, group: dmGroup, description: "Remove all documents in a comma-separated list of " +
 			"collection names specified by the 'collections' property from a comma-separated list of collection names specified by the 'targetCollections' property; " +
 			"if these two lists are the same, you only need to specify the 'collections' property")
+		project.task("mlSetCollections", type: SetCollectionsTask, group: dmGroup, description: "Set collections on all documents in a comma-separated list of " +
+			"collection names specified by the 'collections' property to a comma-separated list of collection names specified by the 'targetCollections' property")
+		project.task("mlAddPermissions", type: AddPermissionsTask, group: dmGroup, description: "Add permissions, specified as a comma-separated list of roles and capabilities via the 'permissions' property, " +
+			"to all documents in the set of collection names specified by the 'collections' property")
+		project.task("mlRemovePermissions", type: RemovePermissionsTask, group: dmGroup, description: "Add permissions, specified as a comma-separated list of roles and capabilities via the 'permissions' property, " +
+			"to all documents in the set of collection names specified by the 'collections' property")
+		project.task("mlSetPermissions", type: AddPermissionsTask, group: dmGroup, description: "Add permissions, specified as a comma-separated list of roles and capabilities via the 'permissions' property, " +
+			"to all documents in the set of collection names specified by the 'collections' property")
 
 		String devGroup = "ml-gradle Development"
 		project.task("mlCreateResource", type: CreateResourceTask, group: devGroup, description: "Create a new resource extension in the modules services directory; use -PresourceName and -PresourceType to set the resource name and type (either xqy or sjs)")

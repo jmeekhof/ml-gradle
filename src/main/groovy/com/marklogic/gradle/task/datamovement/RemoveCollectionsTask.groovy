@@ -1,13 +1,9 @@
 package com.marklogic.gradle.task.datamovement
 
-import com.marklogic.client.DatabaseClient
-import com.marklogic.client.ext.datamovement.QueryBatcherTemplate
-import com.marklogic.client.ext.datamovement.listener.AddCollectionsListener
 import com.marklogic.client.ext.datamovement.listener.RemoveCollectionsListener
-import com.marklogic.gradle.task.MarkLogicTask
 import org.gradle.api.tasks.TaskAction
 
-class RemoveCollectionsTask extends MarkLogicTask {
+class RemoveCollectionsTask extends DataMovementTask {
 
 	/**
 	 * This task allows for specifying source collections for documents that should be removed from target collections,
@@ -28,14 +24,9 @@ class RemoveCollectionsTask extends MarkLogicTask {
 			targetCollections = getProject().property("targetCollections").split(",")
 		}
 
-		DatabaseClient client = newClient()
-		try {
-			String message = "in collections: " + Arrays.asList(collections) + " from collections: " + Arrays.asList(targetCollections)
-			println "Removing documents " + message
-			new QueryBatcherTemplate(client).applyOnCollections(new RemoveCollectionsListener(targetCollections), collections);
-			println "Finished removing documents " + message
-		} finally {
-			client.release()
-		}
+		String message = "in collections: " + Arrays.asList(collections) + " from collections: " + Arrays.asList(targetCollections)
+		println "Removing documents " + message
+		applyOnCollections(new RemoveCollectionsListener(targetCollections), collections);
+		println "Finished removing documents " + message
 	}
 }
